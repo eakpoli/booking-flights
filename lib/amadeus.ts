@@ -42,7 +42,7 @@ export async function getFlightOffers(params: any) {
       },
     });
 
-    console.log({ response, url, accessToken });
+    console.log({ params, response, url, accessToken });
 
     if (!response.ok) {
       throw new Error(`Error fetching flight offers: ${response.statusText}`);

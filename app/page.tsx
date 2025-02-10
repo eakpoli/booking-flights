@@ -8,12 +8,6 @@ import { Card } from "@/components/ui/card";
 import { DatePicker } from "@/components/ui/date-picker";
 import { format } from "date-fns";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Image from "next/image";
-import {
-  generateAccessToken,
-  getFlightDestinations,
-  getFlightOffers,
-} from "@/lib/amadeus";
 
 export default function Home() {
   const [searchParams, setSearchParams] = useState({
@@ -36,15 +30,11 @@ export default function Home() {
     setError("");
 
     try {
-      const response = await getFlightOffers({
-        originLocationCode: searchParams.from,
-        destinationLocationCode: searchParams.to,
-        departureDate: format(searchParams.date, "yyyy-MM-dd"),
-      });
-
-      console.log(response);
-
-      console.log(response);
+      const response = await fetch(
+        `/api/flights?from=${searchParams.from}&to=${
+          searchParams.to
+        }&date=${format(searchParams.date, "yyyy-MM-dd")}`
+      );
 
       if (!response.ok) {
         throw new Error("Failed to fetch flights");
@@ -88,11 +78,10 @@ export default function Home() {
       {/* Hero Section */}
       <div className="relative h-[400px] bg-gradient-to-r from-blue-600 to-blue-400">
         <div className="absolute inset-0">
-          <Image
+          <img
             src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&q=80"
             alt="Hero background"
             className="w-full h-full object-cover opacity-20"
-            layout="fill"
           />
         </div>
         <div className="relative max-w-7xl mx-auto pt-20 px-4 sm:px-6 lg:px-8">
