@@ -1,7 +1,7 @@
 import axios from "axios";
 import qs from "qs";
 
-const baseUrl = "https://test.api.amadeus.com/v1";
+const baseUrl = "https://test.api.amadeus.com/v2";
 
 export async function generateAccessToken() {
   const data = qs.stringify({
@@ -13,7 +13,7 @@ export async function generateAccessToken() {
   try {
     const response = await axios({
       method: "post",
-      url: `${baseUrl}/security/oauth2/token`,
+      url: `https://test.api.amadeus.com/v1/security/oauth2/token`,
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
@@ -32,6 +32,8 @@ export async function getFlightOffers(params: any) {
   const queryString = new URLSearchParams(params).toString();
   const url = `${baseUrl}/shopping/flight-offers?${queryString}`;
 
+  console.log("url :>> ", url);
+
   try {
     const response = await fetch(url, {
       method: "GET",
@@ -42,9 +44,9 @@ export async function getFlightOffers(params: any) {
 
     console.log({ response, url, accessToken });
 
-    // if (!response.ok) {
-    //   throw new Error(`Error fetching flight offers: ${response.statusText}`);
-    // }
+    if (!response.ok) {
+      throw new Error(`Error fetching flight offers: ${response.statusText}`);
+    }
 
     const data = await response.json();
     return data;

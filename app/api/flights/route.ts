@@ -1,8 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getFlightOffers } from "@/lib/amadeus";
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
+export const dynamic = "force-dynamic";
+
+export async function GET(request: NextRequest) {
+  const { searchParams } = request.nextUrl;
   const originLocationCode = searchParams.get("from");
   const destinationLocationCode = searchParams.get("to");
   const departureDate = searchParams.get("date");
@@ -29,10 +31,10 @@ export async function GET(request: Request) {
   } catch (error: any) {
     console.error("API error:", error.response?.data || error);
     return NextResponse.json(
-      { 
+      {
         error: "Failed to fetch flights",
-        details: error.response?.data?.errors || error.message 
-      }, 
+        details: error.response?.data?.errors || error.message,
+      },
       { status: 500 }
     );
   }
